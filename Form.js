@@ -1,5 +1,10 @@
 export default class Form
 {
+	/**
+	 * Create a new Form instance
+	 *
+	 * @param {object} data
+	 */
 	constructor (data)
 	{
 		this.data = data;
@@ -10,6 +15,9 @@ export default class Form
 		this.errors = new Errors();
 	}
 
+	/**
+	 * Fetch all relevant data for the form.
+	 */
 	data ()
 	{
 		let data = Object.assign({}, this);
@@ -18,6 +26,9 @@ export default class Form
 		return data;
 	}
 
+	/**
+	 * Reset the form fields.
+	 */
 	reset ()
 	{
 		for (let field in this.originalData) {
@@ -25,6 +36,12 @@ export default class Form
 		}
 	}
 
+	/**
+	 * Submit the form
+	 *
+	 * @param {string} requestType
+	 * @param {string} url
+	 */
 	submit (requestType, url)
 	{
 		axios[requestType](url, this.data())
@@ -32,13 +49,23 @@ export default class Form
 			.catch(this.onFail.bind(this))
 	}
 
+	/**
+	 * Handle a successful form submission.
+	 *
+	 * @param {object} response
+	 */
 	onSuccess (response)
 	{
-		alert(response.data.message);
+		alert(response.data.message); // temporary
 		this.errors.clear();
 		this.reset();
 	}
 
+	/**
+	 * Handle a faild form submission.
+	 *
+	 * @param {object} error
+	 */
 	onFail (error)
 	{
 		this.errors.record(error.response.data);
