@@ -1,4 +1,4 @@
-export default class Errors
+class Errors
 {
 	/**
 	 * Create a new Errors instance.
@@ -64,3 +64,5 @@ export default class Errors
 		this.errors = {};
 	}
 }
+
+export default Errors;
