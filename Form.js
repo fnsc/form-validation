@@ -43,25 +43,47 @@ class Form
 		this.errors.clear();
 	}
 
+	/**
+     * Send a POST request to the given URL.
+     * .
+     * @param {string} url
+     */
 	post (url)
 	{
 		return this.submit('post', url);
 	}
 
-	delete (url)
+	/**
+     * Send a PUT request to the given URL.
+     * .
+     * @param {string} url
+     */
+	put (url)
 	{
-		return this.submit('delete', url);
+		return this.submit('put', url);
 	}
 
+	/**
+     * Send a PATCH request to the given URL.
+     * .
+     * @param {string} url
+     */
 	patch (url)
 	{
 		return this.submit('patch', url);
 	}
 
-	put (url)
+	/**
+     * Send a PATCH request to the given URL.
+     * .
+     * @param {string} url
+     */
+	delete (url)
 	{
-		return this.submit('put', url);
+		return this.submit('delete', url);
 	}
+
+
 
 	/**
 	 * Submit the form
