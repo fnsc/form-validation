@@ -1,4 +1,4 @@
-import Errors from './Errors';
+import Errors from "./Errors";
 
 class Form {
     /**
@@ -16,32 +16,44 @@ class Form {
         this.errors = new Errors();
     }
 
-
     /**
      * Fetch all relevant data for the form.
      */
-    data() {
-        let data = {};
+    data(requestType) {
+        // let data = {};
+        let data = new FormData();
 
+        // for (let property in this.originalData) {
+        // data[property] = this[property];
+        // }
         for (let property in this.originalData) {
-            data[property] = this[property];
+            if (this[property] != null) {
+                if (
+                    typeof this[property] === "object" &&
+                    !("lastModified" in this[property])
+                ) {
+                    data.set(property, JSON.stringify(this[property]));
+                } else {
+                    data.set(property, this[property]);
+                }
+            }
         }
+
+        data.set("_method", requestType);
 
         return data;
     }
-
 
     /**
      * Reset the form fields.
      */
     reset() {
         for (let field in this.originalData) {
-            this[field] = '';
+            this[field] = "";
         }
 
         this.errors.clear();
     }
-
 
     /**
      * Send a POST request to the given URL.
@@ -49,9 +61,8 @@ class Form {
      * @param {string} url
      */
     post(url) {
-        return this.submit('post', url);
+        return this.submit("post", url);
     }
-
 
     /**
      * Send a PUT request to the given URL.
@@ -59,9 +70,8 @@ class Form {
      * @param {string} url
      */
     put(url) {
-        return this.submit('put', url);
+        return this.submit("put", url);
     }
-
 
     /**
      * Send a PATCH request to the given URL.
@@ -69,9 +79,8 @@ class Form {
      * @param {string} url
      */
     patch(url) {
-        return this.submit('patch', url);
+        return this.submit("patch", url);
     }
-
 
     /**
      * Send a DELETE request to the given URL.
@@ -79,9 +88,8 @@ class Form {
      * @param {string} url
      */
     delete(url) {
-        return this.submit('delete', url);
+        return this.submit("delete", url);
     }
-
 
     /**
      * Submit the form.
@@ -91,20 +99,21 @@ class Form {
      */
     submit(requestType, url) {
         return new Promise((resolve, reject) => {
-            axios[requestType](url, this.data())
-                .then(response => {
+            // axios[requestType](url, this.data())
+            axios
+                .post(url, this.data(requestType))
+                .then((response) => {
                     this.onSuccess(response.data);
 
                     resolve(response.data);
                 })
-                .catch(error => {
+                .catch((error) => {
                     this.onFail(error.response.data.errors);
 
                     reject(error.response.data.errors);
                 });
         });
     }
-
 
     /**
      * Handle a successful form submission.
@@ -114,7 +123,6 @@ class Form {
     onSuccess(data) {
         this.reset();
     }
-
 
     /**
      * Handle a failed form submission.
